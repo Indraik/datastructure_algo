@@ -29,7 +29,7 @@ class DubMethods{
 	        System.out.println("Invalid position");
 	        return;
 	    }
-	    
+	  
 	    DubNode node = new DubNode(data);
 	    
 	    if (pos == 1) {

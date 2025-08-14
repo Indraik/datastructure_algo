@@ -1,26 +1,61 @@
 package Graphs;
 
-class DijkstraGraphMatrix{
-	static int[][] adjMAtrix;
-	static int numVert;
-	public DijkstraGraphMatrix(int numVert) {
-		DijkstraGraphMatrix.numVert = numVert;
-		adjMAtrix = new int[numVert][numVert];
-	}
-	public static void addEdge(int src,int dest,int weight) {
-		adjMAtrix[src][dest] = weight;
-	}
-	public static void dijkstra() {
-		
-	}
+class DijkstraGraphMatrix {
+    static int[][] adjMAtrix;
+    static int numVert;
+    public DijkstraGraphMatrix(int numVert) {
+        DijkstraGraphMatrix.numVert = numVert;
+        adjMAtrix = new int[numVert][numVert];
+    }
+    public static void addEdge(int src, int dest, int weight) {
+        adjMAtrix[src][dest] = weight;
+    }
+    public static void dijkstra(int start) {
+        int[] dist = new int[numVert];
+        boolean[] visited = new boolean[numVert];
+        for (int i = 0; i < numVert; i++) {
+            dist[i] = Integer.MAX_VALUE;
+            visited[i] = false;
+        }
+        dist[start] = 0;
+        for (int count = 0; count < numVert - 1; count++) {
+            int u = minDistance(dist, visited);
+            visited[u] = true;
+            for (int v = 0; v < numVert; v++) {
+                if (!visited[v] && adjMAtrix[u][v] != 0 && dist[u] != Integer.MAX_VALUE && dist[u] + adjMAtrix[u][v] < dist[v]) {
+                    dist[v] = dist[u] + adjMAtrix[u][v];
+                }
+            }
+        }
+        for (int i = 0; i < numVert; i++) {
+            System.out.println("Distance from " + start + " to " + i + " is " + dist[i]);
+        }
+    }
+    private static int minDistance(int[] dist, boolean[] visited) {
+        int min = Integer.MAX_VALUE, minIndex = -1;
+        for (int v = 0; v < numVert; v++) {
+            if (!visited[v] && dist[v] <= min) {
+                min = dist[v];
+                minIndex = v;
+            }
+        }
+        return minIndex;
+    }
 }
 
 public class Dijkstra {
-
-	public static void main(String[] args) {
-		
-	
-
-	}
-
+    public static void main(String[] args) {
+        DijkstraGraphMatrix graph = new DijkstraGraphMatrix(5);
+        graph.addEdge(0, 1, 10);
+        graph.addEdge(0, 4, 5);
+        graph.addEdge(1, 2, 1);
+        graph.addEdge(1, 4, 2);
+        graph.addEdge(2, 3, 4);
+        graph.addEdge(3, 0, 7);
+        graph.addEdge(3, 2, 6);
+        graph.addEdge(4, 1, 3);
+        graph.addEdge(4, 2, 9);
+        graph.addEdge(4, 3, 2);
+        graph.dijkstra(0);
+    }
 }
