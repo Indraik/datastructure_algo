@@ -1,16 +1,19 @@
 package Graphs;
 
 class DijkstraGraphMatrix {
-    static int[][] adjMAtrix;
-    static int numVert;
+    int numVert;
+    int[][] adjMatrix;
+
     public DijkstraGraphMatrix(int numVert) {
-        DijkstraGraphMatrix.numVert = numVert;
-        adjMAtrix = new int[numVert][numVert];
+        this.numVert = numVert;
+        adjMatrix = new int[numVert][numVert];
     }
-    public static void addEdge(int src, int dest, int weight) {
-        adjMAtrix[src][dest] = weight;
+
+    public void addEdge(int src, int dest, int weight) {
+        adjMatrix[src][dest] = weight;
     }
-    public static void dijkstra(int start) {
+
+    public void dijkstra(int start) {
         int[] dist = new int[numVert];
         boolean[] visited = new boolean[numVert];
         for (int i = 0; i < numVert; i++) {
@@ -20,10 +23,11 @@ class DijkstraGraphMatrix {
         dist[start] = 0;
         for (int count = 0; count < numVert - 1; count++) {
             int u = minDistance(dist, visited);
+            if (u == -1) break; // All reachable vertices processed
             visited[u] = true;
             for (int v = 0; v < numVert; v++) {
-                if (!visited[v] && adjMAtrix[u][v] != 0 && dist[u] != Integer.MAX_VALUE && dist[u] + adjMAtrix[u][v] < dist[v]) {
-                    dist[v] = dist[u] + adjMAtrix[u][v];
+                if (!visited[v] && adjMatrix[u][v] != 0 && dist[u] != Integer.MAX_VALUE && dist[u] + adjMatrix[u][v] < dist[v]) {
+                    dist[v] = dist[u] + adjMatrix[u][v];
                 }
             }
         }
@@ -31,7 +35,8 @@ class DijkstraGraphMatrix {
             System.out.println("Distance from " + start + " to " + i + " is " + dist[i]);
         }
     }
-    private static int minDistance(int[] dist, boolean[] visited) {
+
+    private int minDistance(int[] dist, boolean[] visited) {
         int min = Integer.MAX_VALUE, minIndex = -1;
         for (int v = 0; v < numVert; v++) {
             if (!visited[v] && dist[v] <= min) {
